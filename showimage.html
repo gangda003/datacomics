@@ -1,0 +1,340 @@
+<!--
+* Copyright (c) 2009 The Chromium Authors. All rights reserved.  Use of this
+* source code is governed by a BSD-style license that can be found in the
+* LICENSE file.
+-->
+<html>
+	<head>
+		<title>Data Comics</title>
+		<meta http-equiv="content-type" charset="UTF-8" content="application/json">
+		<link rel="stylesheet" href="base/jquery.ui.all.css">
+		<!--<link rel="stylesheet" href="css/jquery-ui.min.css"> -->
+		<link rel="stylesheet" href="demos.css">
+		<link rel="stylesheet" href="css/jquery.ibutton.css">
+		<link href="js/jqueryui-editable/css/jqueryui-editable.css" rel="stylesheet"/>
+		<link href="css/style.css" rel="stylesheet"/>
+		<link rel='stylesheet' href='css/spectrum.css' />
+		<link rel='stylesheet' href='css/jquery.dataTables.css' />
+		<link rel='stylesheet' href='css/morris.css' />
+
+		<script src="js/jquery-1.9.1.js"></script>
+		<script src="js/raphael-min.js"></script>
+		<script src="js/morris.js"></script>
+		<!-- <script src="js/jquery-1.10.2.min.js"></script> -->
+
+		<!--  <script src="js/jquery1_6_2.min.js"></script>  -->
+		<!-- <script src="js/jjquery-2.0.3.min.js"></script> -->
+
+		<script src="js/jquery1.11-ui.js"></script>
+		<!--	<script src="js/jquery.ibutton.js"></script> -->
+		<script src="js/d3.js"></script>
+		<script src="js/jqueryui-editable/js/jqueryui-editable.js"></script>
+		<script src="js/jquery/iphone-style-checkboxes.js"></script>
+		<script src="js/jquery.dataTables.js"></script>
+
+		<link rel="stylesheet" href="visdock/visdock.css"  type="text/css" />
+		<script type="text/javascript" src="visdock/visdock.js" ></script>
+		<script type="text/javascript" src="visdock/2D.js" ></script>
+		<script type="text/javascript" src="visdock/IntersectionUtilities.js" ></script>
+		<script type="text/javascript" src="visdock/visdock.utils.js" ></script>
+		<script src="jquery.colorPicker.js" type="text/javascript"></script>
+		<script type="text/javascript" src='js/spectrum.js'></script>
+
+		<style>
+			#photo {
+				padding: 0.5em;
+			}
+			#photo h3 {
+				text-align: center;
+				margin: 0;
+			}
+			#resizable {
+				width: 150px;
+				height: 150px;
+				padding: 0.5em;
+			}
+			#resizable h3 {
+				text-align: center;
+				margin: 0;
+			}
+			.dock {
+				background: url('images/GySvQ.png');
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="viewport">
+			<div id="overlay_window">
+				<div id='cropwindow'>
+					<div id="cropOk">
+						<h1>OK</h1>
+					</div>
+					<div id="cropCancel">
+						<h1>CANCEL</h1>
+					</div>
+					<div id="crop_autoFit">
+						<h1>AUTO</h1>
+					</div>
+
+				</div>
+
+				<div id="upperBlock" class="overlay"></div>
+				<div id="leftBlock" class="overlay"></div>
+				<div id="rightBlock" class="overlay"></div>
+				<div id="bottomBlock" class="overlay"></div>
+			</div>
+
+			<div id='svgWindow'></div>
+			<div class="dock" id="canvasdock"></div>
+			<div  id="cropdock"></div>
+			<div  id="imageDock"></div>
+
+			<div id="top-panel-content">
+				<div id="buttonBar">
+					<a for="singleFrame" class="label">Single Frame</a>
+					<input type="checkbox"  id="singleFrame">
+					<button class="present" id="previous" >
+						previous
+					</button>
+					<button class="present" id="next" >
+						next
+					</button>
+					<a id="cancelPresent" class="cancel" href="/">Cancel</a></p>
+
+				</div>
+				<div id="topPlaceHolder">
+
+				</div>
+				<div id="slideshow">
+
+					<div id="slideshowWindow">
+						<!--
+						<div id="slidesHolder" style="width: 1500px; margin-left: 0px;">
+						</div>
+						-->
+					</div>
+
+				</div>
+			</div>
+
+			<div id="left-panel">
+				<div id="left-trigger-wrapper">
+					<!--	<a  id="left-trigger">Open</a>  -->
+					<img id="left-trigger" style="height:40px; width:40px;"
+					src='images/rightarrow.svg'/>
+
+				</div>
+				<div id="left-panel-content">
+
+					<div id="container">
+						<div class="expandable-panel" id="cp-1">
+							<div class="expandable-panel-heading">
+								<h2>Data Import<span class="icon-close-open"></span></h2>
+							</div>
+							<div class="expandable-panel-content">
+								<table>
+									<tr>
+										<td><label for="projectInput"><h2>Project Name</h2></label></td>
+										<td>
+										<input id="projectInput" type="text" name="project">
+										</td>
+										<td>
+										<button id="comfirm_project">
+											check
+										</button></td>
+									</tr>
+									<tr>
+										<td><button id="crop_button"></button></td>
+
+										<td><button id="loadRepo"></button></td>
+
+									</tr>
+
+									<tr>
+										<td><button id="save"></button></td>
+
+										<td><button id="updateRepo"></button></td>
+
+									</tr>
+
+								</table>
+							</div>
+						</div>
+
+						<div class="expandable-panel" id="cp-2">
+							<div class="expandable-panel-heading">
+								<h2>Operations<span class="icon-close-open"></span></h2>
+							</div>
+							<div class="expandable-panel-content">
+								<div id="toolbar" class="ui-widget-header ui-corner-all">
+
+									<table>
+										<tr>
+											<input id="inputBox" type="text" name="speech">
+											<button id="addText">
+												Add Text
+											</button>
+										</tr>
+										<tr>
+
+											<td>
+											<input id="color1" name="color1" type="text" value="#333399" />
+											</td>
+											<td><em id='color1-log'></em></td>
+
+										</tr>
+										<tr>
+											<td><button id="draw_rec"></button></td>
+											<td><button id="draw_cir"></button></td>
+										</tr>
+
+										<tr>
+											<td><h3>Grid on</h3></td>
+											<td>
+											<input type="checkbox" checked="checked" id="grid">
+											</td>
+										</tr>
+
+										<tr>
+											<td><h3>Delete Mode
+											<br>
+											(click to delete)</h3></td>
+											<td>
+											<input type="checkbox"  id="delete">
+											</td>
+										</tr>
+
+										<tr>
+											<td>
+											<button id="layoutManager">
+												Layout Manager
+											</button></td>
+
+											<td>
+											<button id="presenter">
+												Presenter Mode
+											</button></td>
+
+										</tr>
+										<tr>
+											<td>
+											<button id="tableEditorBtn">
+												Table Editor
+											</button></td>
+										</tr>
+
+									</table>
+								</div>
+							</div>
+						</div>
+
+						<div class="expandable-panel" id="cp-3">
+							<div class="expandable-panel-heading">
+								<h2>Comic Elements<span class="icon-close-open"></span></h2>
+							</div>
+							<div class="expandable-panel-content">
+								<div id="showLayout"></div>
+								<div class="floatveryright"></div>
+							</div>
+						</div>
+
+						<div class="expandable-panel" id="cp-4">
+							<div class="expandable-panel-heading">
+								<h2>SVG Clips<span class="icon-close-open"></span></h2>
+							</div>
+							<div class="expandable-panel-content">
+								<div id="showBox"></div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div id="down-panel-content">
+
+				<div id="wrapper">
+
+				</div>
+				<div id="resizePanel"></div>
+				<div id="right1">
+
+					<div  id="addFrame">
+
+						<img src="images/plus.jpeg" height="60" width="60"/>
+					</div>
+					<div class="loadButton" id="right2">
+						<button class="loadButton" id="update">
+							update
+						</button>
+						<button class="loadButton" id="load">
+							load
+						</button>
+						<a id="cancelLayout" class="cancel" href="/">Cancel</a></p>
+
+					</div>
+
+				</div>
+
+			</div>
+			<div id="tableEditor">
+			<div id="chartButtonBar">
+				<button class="chartButton" id="barchart">
+					bar chart
+				</button>
+				<button class="chartButton" id="linechart">
+					line chart
+				</button>
+				<button class="chartButton" id="donutchart">
+					donut chart
+				</button>
+				<select id="select_column">
+				</select>
+				<button class="chartButton" id="addColumn">
+					add column
+				</button>
+				<span id="column_added">
+				</span>
+				<button class="chartButton" id="resetColumn">
+					reset
+				</button>
+				<a id="cancelTableEditor" class="cancel" href="/">Cancel</a></p>
+
+			</div>
+			<div id="tableTabs">
+				<ul id="tabs"></ul>
+			</div> 
+			<div id="tableVis">
+			</div>
+			</div>
+			
+			
+			
+	<div id="dialog-confirm" title="ID Existed, continue using it?">
+	 <!-- <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p> -->
+	</div>
+			
+  <!--<div id="tableEditor">
+    <ul>
+      <li><a href="#tabs-1">First</a></li>
+      <li><a href="#tabs-2">Second</a></li>
+      <li><a href="#tabs-3">Third</a></li>
+    </ul>
+    <div id="tabs-1">
+      <p>Tab 1 content</p>
+    </div>
+    <div id="tabs-2">
+      <p>Tab 2 content</p>
+    </div>
+    <div id="tabs-3">
+     <p>Tab 3 content</p>
+    </div>
+    </div> 
+    --> 
+
+			<script src="js/ui.js"></script>
+
+			<script src="js/showimage.js"></script>
+	</body>
+</html>
